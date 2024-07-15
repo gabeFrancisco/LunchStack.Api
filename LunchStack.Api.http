@@ -1,0 +1,6 @@
+@LunchStack.Api_HostAddress = http://localhost:5187
+
+GET {{LunchStack.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
