@@ -1,7 +1,8 @@
 using AutoMapper;
 using LunchStack.Api.Context;
+using LunchStack.Api.Models.Interfaces;
 using LunchStack.Api.Models.Mappings;
-using Microsoft.AspNetCore.Identity;
+using LunchStack.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,9 @@ var configuration = new ConfigurationBuilder()
                 .Build();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Dev")));
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
