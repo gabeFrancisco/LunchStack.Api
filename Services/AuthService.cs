@@ -3,6 +3,7 @@ using LunchStack.Api.Context;
 using LunchStack.Api.Models;
 using LunchStack.Api.Models.DTOs;
 using LunchStack.Api.Models.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace LunchStack.Api.Services
 {
@@ -10,14 +11,38 @@ namespace LunchStack.Api.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        public AuthService(AppDbContext context, IMapper mapper)
+        private readonly ITokenService _tokenService;
+        public AuthService(AppDbContext context, IMapper mapper, ITokenService tokenService)
         {
             _context = context;
             _mapper = mapper;
+            _tokenService = tokenService;
         }
-        public Task<dynamic> Login(LoginDTO loginDto)
+        public async Task<dynamic> Login(LoginDTO loginDto)
         {
-            throw new NotImplementedException();
+            if (loginDto is null)
+            {
+                throw new NullReferenceException("Login data cannot be null!");
+            }
+
+            var user = await _context.Users
+                .Where(x => x.Username == loginDto.Username)
+                .SingleOrDefaultAsync() ?? throw new NullReferenceException("Username is incorrect!");
+
+            bool verified = BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password);
+            if (!verified)
+            {
+                throw new InvalidOperationException("Password is incorrect!");
+            }
+
+            user.Password = "";
+
+            return new
+            {
+                User = user,
+                Token = _tokenService.GenerateToken(user.Username, user.Id.ToString()),
+                Message = $"The user {user.Username} is logged succesfully!"
+            };
         }
 
         public async Task<dynamic> Register(UserDTO userDto)

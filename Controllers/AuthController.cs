@@ -26,5 +26,18 @@ namespace LunchStack.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
+        {
+            try
+            {
+                return Ok(await _authService.Login(loginDto));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
