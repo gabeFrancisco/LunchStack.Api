@@ -3,6 +3,7 @@ using LunchStack.Api.Context;
 using LunchStack.Api.Models;
 using LunchStack.Api.Models.DTOs;
 using LunchStack.Api.Models.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace LunchStack.Api.Services
@@ -10,13 +11,15 @@ namespace LunchStack.Api.Services
     public class AuthService : IAuthService
     {
         private readonly AppDbContext _context;
+        private readonly IHttpContextAccessor _httpContext;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
-        public AuthService(AppDbContext context, IMapper mapper, ITokenService tokenService)
+        public AuthService(AppDbContext context, IMapper mapper, ITokenService tokenService, IHttpContextAccessor httpContext)
         {
             _context = context;
             _mapper = mapper;
             _tokenService = tokenService;
+            _httpContext = httpContext;
         }
         public async Task<dynamic> Login(LoginDTO loginDto)
         {
@@ -37,10 +40,19 @@ namespace LunchStack.Api.Services
 
             user.Password = "";
 
+            var token = _tokenService.GenerateToken(user.Username, user.Id.ToString());
+            _httpContext.HttpContext!.Response.Cookies.Append("refreshToken", token, new CookieOptions
+            {
+                HttpOnly = true,
+                IsEssential = true,
+                Secure = true,
+                SameSite = SameSiteMode.None
+            });
+
             return new
             {
                 User = user,
-                Token = _tokenService.GenerateToken(user.Username, user.Id.ToString()),
+                Token = token,
                 Message = $"The user {user.Username} is logged succesfully!"
             };
         }

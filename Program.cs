@@ -24,7 +24,7 @@ var configuration = new ConfigurationBuilder()
                 .Build();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Dev")));
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
@@ -50,7 +50,7 @@ builder.Services.AddAuthentication(x =>
     {
         OnMessageReceived = ctx =>
         {
-            ctx.Request.Cookies.TryGetValue("accessToken", out var accessToken);
+            ctx.Request.Cookies.TryGetValue("refreshToken", out var accessToken);
             if (!string.IsNullOrEmpty(accessToken))
             {
                 ctx.Token = accessToken;
