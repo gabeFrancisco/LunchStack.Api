@@ -1,6 +1,7 @@
 
 using LunchStack.Api.Models.DTOs;
 using LunchStack.Api.Models.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LunchStack.Api.Controllers
@@ -33,6 +34,20 @@ namespace LunchStack.Api.Controllers
             try
             {
                 return Ok(await _authService.Login(loginDto));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        public IActionResult Get()
+        {
+            try
+            {
+                return Ok("God bless you!");
             }
             catch (Exception ex)
             {
