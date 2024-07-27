@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using LunchStack.Api.Models.Enums;
 
 namespace LunchStack.Api.Models.DTOs

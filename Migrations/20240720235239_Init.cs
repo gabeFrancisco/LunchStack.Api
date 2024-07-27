@@ -23,7 +23,7 @@ namespace LunchStack.Api.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
-                    LastUserWorkGroup = table.Column<int>(type: "integer", nullable: false),
+                    LastUserWorkgroup = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -33,7 +33,7 @@ namespace LunchStack.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "WorkGroup",
+                name: "Workgroup",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -46,9 +46,9 @@ namespace LunchStack.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_WorkGroup", x => x.Id);
+                    table.PrimaryKey("PK_Workgroup", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WorkGroup_Users_UserId",
+                        name: "FK_Workgroup_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -56,46 +56,46 @@ namespace LunchStack.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserWorkGroup",
+                name: "UserWorkgroup",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<int>(type: "integer", nullable: false),
-                    WorkGroupId = table.Column<int>(type: "integer", nullable: false),
+                    WorkgroupId = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserWorkGroup", x => x.Id);
+                    table.PrimaryKey("PK_UserWorkgroup", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserWorkGroup_Users_UserId",
+                        name: "FK_UserWorkgroup_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserWorkGroup_WorkGroup_WorkGroupId",
-                        column: x => x.WorkGroupId,
-                        principalTable: "WorkGroup",
+                        name: "FK_UserWorkgroup_Workgroup_WorkgroupId",
+                        column: x => x.WorkgroupId,
+                        principalTable: "Workgroup",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserWorkGroup_UserId",
-                table: "UserWorkGroup",
+                name: "IX_UserWorkgroup_UserId",
+                table: "UserWorkgroup",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserWorkGroup_WorkGroupId",
-                table: "UserWorkGroup",
-                column: "WorkGroupId");
+                name: "IX_UserWorkgroup_WorkgroupId",
+                table: "UserWorkgroup",
+                column: "WorkgroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_WorkGroup_UserId",
-                table: "WorkGroup",
+                name: "IX_Workgroup_UserId",
+                table: "Workgroup",
                 column: "UserId");
         }
 
@@ -103,10 +103,10 @@ namespace LunchStack.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "UserWorkGroup");
+                name: "UserWorkgroup");
 
             migrationBuilder.DropTable(
-                name: "WorkGroup");
+                name: "Workgroup");
 
             migrationBuilder.DropTable(
                 name: "Users");

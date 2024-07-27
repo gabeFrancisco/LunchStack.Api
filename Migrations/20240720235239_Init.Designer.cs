@@ -40,7 +40,7 @@ namespace LunchStack.Api.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("LastUserWorkGroup")
+                    b.Property<int>("LastUserWorkgroup")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -66,7 +66,7 @@ namespace LunchStack.Api.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("LunchStack.Api.Models.UserWorkGroup", b =>
+            modelBuilder.Entity("LunchStack.Api.Models.UserWorkgroup", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,19 +83,19 @@ namespace LunchStack.Api.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("WorkGroupId")
+                    b.Property<int>("WorkgroupId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("WorkGroupId");
+                    b.HasIndex("WorkgroupId");
 
-                    b.ToTable("UserWorkGroup");
+                    b.ToTable("UserWorkgroup");
                 });
 
-            modelBuilder.Entity("LunchStack.Api.Models.WorkGroup", b =>
+            modelBuilder.Entity("LunchStack.Api.Models.Workgroup", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -124,29 +124,29 @@ namespace LunchStack.Api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("WorkGroup");
+                    b.ToTable("Workgroup");
                 });
 
-            modelBuilder.Entity("LunchStack.Api.Models.UserWorkGroup", b =>
+            modelBuilder.Entity("LunchStack.Api.Models.UserWorkgroup", b =>
                 {
                     b.HasOne("LunchStack.Api.Models.User", "User")
-                        .WithMany("UserWorkGroups")
+                        .WithMany("UserWorkgroups")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LunchStack.Api.Models.WorkGroup", "WorkGroup")
+                    b.HasOne("LunchStack.Api.Models.Workgroup", "Workgroup")
                         .WithMany()
-                        .HasForeignKey("WorkGroupId")
+                        .HasForeignKey("WorkgroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
 
-                    b.Navigation("WorkGroup");
+                    b.Navigation("Workgroup");
                 });
 
-            modelBuilder.Entity("LunchStack.Api.Models.WorkGroup", b =>
+            modelBuilder.Entity("LunchStack.Api.Models.Workgroup", b =>
                 {
                     b.HasOne("LunchStack.Api.Models.User", "User")
                         .WithMany()
@@ -159,7 +159,7 @@ namespace LunchStack.Api.Migrations
 
             modelBuilder.Entity("LunchStack.Api.Models.User", b =>
                 {
-                    b.Navigation("UserWorkGroups");
+                    b.Navigation("UserWorkgroups");
                 });
 #pragma warning restore 612, 618
         }

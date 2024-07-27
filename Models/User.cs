@@ -9,7 +9,7 @@ namespace LunchStack.Api.Models
         public required string Name { get; set; }
         public required string Email { get; set; }
         public Role Role { get; set; }
-        public IEnumerable<UserWorkGroup>? UserWorkGroups { get; set; }
-        public int LastUserWorkGroup { get; set; }
+        public IEnumerable<UserWorkgroup>? UserWorkgroups { get; set; }
+        public int LastUserWorkgroup { get; set; }
     }
 }
