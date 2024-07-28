@@ -25,8 +25,11 @@ var configuration = new ConfigurationBuilder()
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Dev")));
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IWorkgroupService, WorkgroupService>();
 
 builder.Services.AddAuthentication(x =>
 {

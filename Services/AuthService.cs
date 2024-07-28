@@ -13,12 +13,14 @@ namespace LunchStack.Api.Services
         private readonly IHttpContextAccessor _httpContext;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
-        public AuthService(AppDbContext context, IMapper mapper, ITokenService tokenService, IHttpContextAccessor httpContext)
+        private readonly IUserService _userService;
+        public AuthService(AppDbContext context, IMapper mapper, ITokenService tokenService, IHttpContextAccessor httpContext, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
             _tokenService = tokenService;
             _httpContext = httpContext;
+            _userService = userService;
         }
         public async Task<dynamic> Login(LoginDTO loginDto)
         {
@@ -63,25 +65,11 @@ namespace LunchStack.Api.Services
                 throw new NullReferenceException("DTO cannot be null!");
             }
 
-            var user = _mapper.Map<UserDTO, User>(userDto);
-
-            if (_context.Users.Any(dbUser =>
-                    dbUser.Username == user.Username
-                || dbUser.Email == user.Email))
-            {
-                throw new InvalidOperationException("Username or email already taken! Thy another one!");
-            }
-
-            string pwdHash = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            user.Password = pwdHash;
-            user.CreatedAt = DateTime.UtcNow;
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _userService.CreateAsync(userDto);
 
             return new
             {
-                Message = $"User {user.Username} registered with success! Try login into the system."
+                Message = $"User {userDto.Username} registered with success! Try login into the system."
             };
         }
     }
