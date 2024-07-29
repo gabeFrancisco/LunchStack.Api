@@ -15,13 +15,6 @@ namespace LunchStack.Api.Services
             _config = config;
         }
 
-        public string GenerateRefreshToken()
-        {
-            var randomNumber = new byte[32];
-            using var rng = RandomNumberGenerator.Create();
-            rng.GetBytes(randomNumber);
-            return Convert.ToBase64String(randomNumber);
-        }
 
         public string GenerateToken(string username, string userId)
         {
@@ -45,5 +38,31 @@ namespace LunchStack.Api.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public string GenerateToken(IEnumerable<Claim> claims)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var createDate = _config["TokenConfiguration:ExpireSeconds"];
+            var expiration = DateTime.UtcNow.AddSeconds(double.Parse(createDate!));
+
+            var token = new JwtSecurityToken(
+                issuer: _config["TokenConfiguration:Issuer"],
+                audience: _config["TokenConfiguration:Audience"],
+                claims: claims,
+                expires: expiration,
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        public string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
     }
 }
