@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using LunchStack.Api.Models.Interfaces;
 using Microsoft.IdentityModel.Tokens;
@@ -13,6 +14,15 @@ namespace LunchStack.Api.Services
         {
             _config = config;
         }
+
+        public string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+        }
+
         public string GenerateToken(string username, string userId)
         {
             var claims = new[]{
