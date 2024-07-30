@@ -7,5 +7,6 @@ namespace LunchStack.Api.Models.Interfaces
         string GenerateToken(string username, string userId);
         string GenerateToken(IEnumerable<Claim> claims);
         string GenerateRefreshToken();
+        ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
     }
 }
