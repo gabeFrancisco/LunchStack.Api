@@ -84,5 +84,7 @@ namespace LunchStack.Api.Services
 
             return principal;
         }
+
+        private List<(string, string)> _refreshTokens = new();
     }
 }
