@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LunchStack.Api.Models
 {
-    public class RefreshToken
+    public class RefreshToken : BaseEntity
     {
         public required string Username { get; set; }
         public required string Token { get; set; }
