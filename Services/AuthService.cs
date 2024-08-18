@@ -42,6 +42,9 @@ namespace LunchStack.Api.Services
             user.Password = "";
 
             var token = _tokenService.GenerateToken(user.Username, user.Id.ToString());
+            var refreshToken = _tokenService.GenerateRefreshToken();
+            _tokenService.SaveRefreshToken(user.Username, refreshToken);
+
             _httpContext.HttpContext!.Response.Cookies.Append("refreshToken", token, new CookieOptions
             {
                 HttpOnly = true,
@@ -54,6 +57,7 @@ namespace LunchStack.Api.Services
             {
                 User = user,
                 Token = token,
+                RefreshToken = refreshToken,
                 Message = $"The user {user.Username} is logged succesfully!"
             };
         }
