@@ -6,5 +6,6 @@ namespace LunchStack.Api.Models.Interfaces
     {
         Task<dynamic> Register(UserDTO userDto);
         Task<dynamic> Login(LoginDTO loginDto);
+        dynamic Refresh(string token, string refreshToken);
     }
 }

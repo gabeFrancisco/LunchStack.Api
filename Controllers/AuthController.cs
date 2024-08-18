@@ -40,6 +40,18 @@ namespace LunchStack.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost]
+        public IActionResult Refresh(string token, string refreshToken)
+        {
+            try
+            {
+                return Ok(_authService.Refresh(token, refreshToken));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = "Bearer")]
@@ -54,5 +66,7 @@ namespace LunchStack.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
     }
 }

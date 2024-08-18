@@ -4,6 +4,7 @@ using LunchStack.Api.Models;
 using LunchStack.Api.Models.DTOs;
 using LunchStack.Api.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace LunchStack.Api.Services
 {
@@ -60,6 +61,29 @@ namespace LunchStack.Api.Services
                 RefreshToken = refreshToken,
                 Message = $"The user {user.Username} is logged succesfully!"
             };
+        }
+
+        public dynamic Refresh(string token, string refreshToken)
+        {
+            var principal = _tokenService.GetPrincipalFromExpiredToken(token);
+            var username = principal.Identity!.Name!;
+            var savedRefreshToken = _tokenService.GetRefreshToken(username);
+
+            if (savedRefreshToken != refreshToken)
+                throw new SecurityTokenException("Invalid refresh token");
+
+
+            var newJwtToken = _tokenService.GenerateToken(principal.Claims);
+            var newRefreshToken = _tokenService.GenerateRefreshToken();
+            _tokenService.DeleteRefreshToken(username, refreshToken);
+            _tokenService.SaveRefreshToken(username, newRefreshToken);
+
+            return new
+            {
+                Token = token,
+                RefreshToken = refreshToken,
+            };
+
         }
 
         public async Task<dynamic> Register(UserDTO userDto)
