@@ -2,7 +2,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using LunchStack.Api.Context;
+using LunchStack.Api.Models;
 using LunchStack.Api.Models.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace LunchStack.Api.Services
@@ -10,9 +13,11 @@ namespace LunchStack.Api.Services
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _config;
-        public TokenService(IConfiguration config)
+        private readonly AppDbContext _context;
+        public TokenService(IConfiguration config, AppDbContext context)
         {
             _config = config;
+            _context = context;
         }
 
 
@@ -85,6 +90,29 @@ namespace LunchStack.Api.Services
             return principal;
         }
 
-        private List<(string, string)> _refreshTokens = new();
+        public async void SaveRefreshToken(string username, string refreshToken)
+        {
+            _context.RefreshTokens.Add(new RefreshToken
+            {
+                Username = username,
+                Token = refreshToken,
+                CreatedAt = DateTime.UtcNow
+            }
+            );
+
+            await _context.SaveChangesAsync();
+        }
+
+        public string GetRefreshToken(string username)
+        {
+            return _context.RefreshTokens.FirstOrDefault(rt => rt.Username == username)!.Username;
+        }
+
+        public async void DeleteRefreshToken(string username, string refreshToken)
+        {
+            var dbToken = _context.RefreshTokens.FirstOrDefault(rt => rt.Username == username && rt.Token == refreshToken);
+            _context.RefreshTokens.Remove(dbToken!);
+            await _context.SaveChangesAsync();
+        }
     }
 }
