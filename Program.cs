@@ -53,7 +53,7 @@ builder.Services.AddAuthentication(x =>
     {
         OnMessageReceived = ctx =>
         {
-            ctx.Request.Cookies.TryGetValue("refreshToken", out var accessToken);
+            ctx.Request.Cookies.TryGetValue("token", out var accessToken);
             if (!string.IsNullOrEmpty(accessToken))
             {
                 ctx.Token = accessToken;

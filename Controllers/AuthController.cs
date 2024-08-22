@@ -40,7 +40,7 @@ namespace LunchStack.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost]
+        [HttpPost("refresh")]
         public IActionResult Refresh(string token, string refreshToken)
         {
             try

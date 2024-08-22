@@ -105,7 +105,7 @@ namespace LunchStack.Api.Services
 
         public string GetRefreshToken(string username)
         {
-            return _context.RefreshTokens.FirstOrDefault(rt => rt.Username == username)!.Username;
+            return _context.RefreshTokens.FirstOrDefault(rt => rt.Username == username)!.Token;
         }
 
         public async void DeleteRefreshToken(string username, string refreshToken)

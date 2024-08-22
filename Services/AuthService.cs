@@ -31,6 +31,7 @@ namespace LunchStack.Api.Services
             }
 
             var user = await _context.Users
+                .AsNoTracking()
                 .Where(x => x.Username == loginDto.Username)
                 .SingleOrDefaultAsync() ?? throw new NullReferenceException("Username is incorrect!");
 
@@ -46,19 +47,28 @@ namespace LunchStack.Api.Services
             var refreshToken = _tokenService.GenerateRefreshToken();
             _tokenService.SaveRefreshToken(user.Username, refreshToken);
 
-            _httpContext.HttpContext!.Response.Cookies.Append("refreshToken", token, new CookieOptions
+            _httpContext.HttpContext!.Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
             {
                 HttpOnly = true,
                 IsEssential = true,
                 Secure = true,
-                SameSite = SameSiteMode.None
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMonths(6)
+            });
+
+            _httpContext.HttpContext!.Response.Cookies.Append("token", token, new CookieOptions{
+                HttpOnly = true,
+                IsEssential = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(5)
             });
 
             return new
             {
                 User = user,
-                Token = token,
-                RefreshToken = refreshToken,
+                // Token = token,
+                // RefreshToken = refreshToken,
                 Message = $"The user {user.Username} is logged succesfully!"
             };
         }
@@ -67,7 +77,9 @@ namespace LunchStack.Api.Services
         {
             var principal = _tokenService.GetPrincipalFromExpiredToken(token);
             var username = principal.Identity!.Name!;
+            Console.WriteLine(username);
             var savedRefreshToken = _tokenService.GetRefreshToken(username);
+            Console.WriteLine(savedRefreshToken);
 
             if (savedRefreshToken != refreshToken)
                 throw new SecurityTokenException("Invalid refresh token");
@@ -80,8 +92,8 @@ namespace LunchStack.Api.Services
 
             return new
             {
-                Token = token,
-                RefreshToken = refreshToken,
+                Token = newJwtToken,
+                RefreshToken = newRefreshToken,
             };
 
         }
