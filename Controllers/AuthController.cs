@@ -11,9 +11,11 @@ namespace LunchStack.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        public AuthController(IAuthService authService)
+        private readonly IHttpContextAccessor _httpAccessor;
+        public AuthController(IAuthService authService, IHttpContextAccessor httpAccessor)
         {
             _authService = authService;
+            _httpAccessor = httpAccessor;
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDTO userDto)
@@ -41,11 +43,13 @@ namespace LunchStack.Api.Controllers
             }
         }
         [HttpPost("refresh")]
-        public IActionResult Refresh(string token, string refreshToken)
+        public IActionResult Refresh(string token)
         {
             try
             {
-                return Ok(_authService.Refresh(token, refreshToken));
+                _httpAccessor.HttpContext!.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
+                Console.WriteLine(refreshToken);
+                return Ok(_authService.Refresh(token, refreshToken!));
             }
             catch (Exception ex)
             {

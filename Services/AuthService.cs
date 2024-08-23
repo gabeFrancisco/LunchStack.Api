@@ -15,7 +15,11 @@ namespace LunchStack.Api.Services
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
         private readonly IUserService _userService;
-        public AuthService(AppDbContext context, IMapper mapper, ITokenService tokenService, IHttpContextAccessor httpContext, IUserService userService)
+        public AuthService(AppDbContext context, 
+                           IMapper mapper, 
+                           ITokenService tokenService,
+                           IHttpContextAccessor httpContext, 
+                           IUserService userService)
         {
             _context = context;
             _mapper = mapper;
@@ -53,10 +57,12 @@ namespace LunchStack.Api.Services
                 IsEssential = true,
                 Secure = true,
                 SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddMonths(6)
+                Expires = DateTime.UtcNow.AddMonths(6),
+                Path = "/api/auth/refresh"
             });
 
-            _httpContext.HttpContext!.Response.Cookies.Append("token", token, new CookieOptions{
+            _httpContext.HttpContext!.Response.Cookies.Append("token", token, new CookieOptions
+            {
                 HttpOnly = true,
                 IsEssential = true,
                 Secure = true,
