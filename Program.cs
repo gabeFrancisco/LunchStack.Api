@@ -7,6 +7,7 @@ using LunchStack.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,24 +50,54 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
     };
-    options.Events = new JwtBearerEvents
-    {
-        OnMessageReceived = ctx =>
-        {
-            ctx.Request.Cookies.TryGetValue("refreshToken", out var accessToken);
-            if (!string.IsNullOrEmpty(accessToken))
-            {
-                ctx.Token = accessToken;
-            }
-            return Task.CompletedTask;
-        }
-    };
+    // options.Events = new JwtBearerEvents
+    // {
+    //     OnMessageReceived = ctx =>
+    //     {
+    //         ctx.Request.Cookies.TryGetValue("refreshToken", out var accessToken);
+    //         if (!string.IsNullOrEmpty(accessToken))
+    //         {
+    //             ctx.Token = accessToken;
+    //         }
+    //         return Task.CompletedTask;
+    //     }
+    // };
 });
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    // c.SwaggerDoc("v1", new OpenApiInfo { Title = "RecantosSystem.Api", Version = "v1" });
+    // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+    // c.IncludeXmlComments(xmlPath);
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",  
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Auth header using the Bearer scheme"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+        new OpenApiSecurityScheme{
+            Reference = new OpenApiReference{
+                Type = ReferenceType.SecurityScheme,
+                Id = "Bearer"
+            }
+        },
+        Array.Empty<string>()
+        }
+    });
+});
 
 var app = builder.Build();
 
