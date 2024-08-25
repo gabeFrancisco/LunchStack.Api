@@ -15,10 +15,10 @@ namespace LunchStack.Api.Services
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
         private readonly IUserService _userService;
-        public AuthService(AppDbContext context, 
-                           IMapper mapper, 
+        public AuthService(AppDbContext context,
+                           IMapper mapper,
                            ITokenService tokenService,
-                           IHttpContextAccessor httpContext, 
+                           IHttpContextAccessor httpContext,
                            IUserService userService)
         {
             _context = context;
@@ -49,6 +49,7 @@ namespace LunchStack.Api.Services
 
             var token = _tokenService.GenerateToken(user.Username, user.Id.ToString());
             var refreshToken = _tokenService.GenerateRefreshToken();
+            _tokenService.DeleteRefreshToken(user.Username);
             _tokenService.SaveRefreshToken(user.Username, refreshToken);
 
             _httpContext.HttpContext!.Response.Cookies.Append("refreshToken", refreshToken, new CookieOptions
@@ -72,9 +73,7 @@ namespace LunchStack.Api.Services
         {
             var principal = _tokenService.GetPrincipalFromExpiredToken(token);
             var username = principal.Identity!.Name!;
-            Console.WriteLine(username);
             var savedRefreshToken = _tokenService.GetRefreshToken(username);
-            Console.WriteLine(savedRefreshToken);
 
             if (savedRefreshToken != refreshToken)
                 throw new SecurityTokenException("Invalid refresh token");
@@ -84,6 +83,15 @@ namespace LunchStack.Api.Services
             var newRefreshToken = _tokenService.GenerateRefreshToken();
             _tokenService.DeleteRefreshToken(username);
             _tokenService.SaveRefreshToken(username, newRefreshToken);
+
+            _httpContext.HttpContext!.Response.Cookies.Append("refreshToken", newRefreshToken, new CookieOptions
+            {
+                HttpOnly = true,
+                IsEssential = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMonths(6),
+            });
 
             return new
             {

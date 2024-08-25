@@ -108,11 +108,11 @@ namespace LunchStack.Api.Services
             return _context.RefreshTokens.FirstOrDefault(rt => rt.Username == username)!.Token;
         }
 
-        public async void DeleteRefreshToken(string username)
+        public void DeleteRefreshToken(string username)
         {
-            var dbToken = _context.RefreshTokens.FirstOrDefault(rt => rt.Username == username);
-            _context.RefreshTokens.Remove(dbToken!);
-            await _context.SaveChangesAsync();
+            var dbToken = _context.RefreshTokens.Where(rt => rt.Username == username);
+            _context.RefreshTokens.RemoveRange(dbToken!);
+            _context.SaveChanges();
         }
     }
 }
