@@ -99,9 +99,11 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+var lunchStackPolicy = "lunchstack";
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("*", builder =>
+    options.AddPolicy(lunchStackPolicy, builder =>
     {
         builder
             .AllowAnyMethod()
@@ -110,6 +112,8 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
+
+
 
 var app = builder.Build();
 
@@ -120,6 +124,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(lunchStackPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
