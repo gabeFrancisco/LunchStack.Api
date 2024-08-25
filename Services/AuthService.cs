@@ -58,22 +58,22 @@ namespace LunchStack.Api.Services
                 Secure = true,
                 SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddMonths(6),
-                Path = "/api/auth/refresh"
+                // Path = "/api/auth/refresh"
             });
 
-            _httpContext.HttpContext!.Response.Cookies.Append("token", token, new CookieOptions
-            {
-                HttpOnly = true,
-                IsEssential = true,
-                Secure = true,
-                SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddMinutes(5)
-            });
+            // _httpContext.HttpContext!.Response.Cookies.Append("token", token, new CookieOptions
+            // {
+            //     HttpOnly = true,
+            //     IsEssential = true,
+            //     Secure = true,
+            //     SameSite = SameSiteMode.None,
+            //     Expires = DateTime.UtcNow.AddMinutes(5)
+            // });
 
             return new
             {
                 User = user,
-                // Token = token,
+                Token = token,
                 // RefreshToken = refreshToken,
                 Message = $"The user {user.Username} is logged succesfully!"
             };
@@ -93,7 +93,7 @@ namespace LunchStack.Api.Services
 
             var newJwtToken = _tokenService.GenerateToken(principal.Claims);
             var newRefreshToken = _tokenService.GenerateRefreshToken();
-            _tokenService.DeleteRefreshToken(username, refreshToken);
+            _tokenService.DeleteRefreshToken(username);
             _tokenService.SaveRefreshToken(username, newRefreshToken);
 
             return new

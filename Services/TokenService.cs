@@ -90,7 +90,7 @@ namespace LunchStack.Api.Services
             return principal;
         }
 
-        public async void SaveRefreshToken(string username, string refreshToken)
+        public void SaveRefreshToken(string username, string refreshToken)
         {
             _context.RefreshTokens.Add(new RefreshToken
             {
@@ -100,7 +100,7 @@ namespace LunchStack.Api.Services
             }
             );
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public string GetRefreshToken(string username)
@@ -108,9 +108,9 @@ namespace LunchStack.Api.Services
             return _context.RefreshTokens.FirstOrDefault(rt => rt.Username == username)!.Token;
         }
 
-        public async void DeleteRefreshToken(string username, string refreshToken)
+        public async void DeleteRefreshToken(string username)
         {
-            var dbToken = _context.RefreshTokens.FirstOrDefault(rt => rt.Username == username && rt.Token == refreshToken);
+            var dbToken = _context.RefreshTokens.FirstOrDefault(rt => rt.Username == username);
             _context.RefreshTokens.Remove(dbToken!);
             await _context.SaveChangesAsync();
         }

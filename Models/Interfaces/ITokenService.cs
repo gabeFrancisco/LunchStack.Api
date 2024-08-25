@@ -10,6 +10,6 @@ namespace LunchStack.Api.Models.Interfaces
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
         void SaveRefreshToken(string username, string refreshToken);
         string GetRefreshToken(string username);
-        void DeleteRefreshToken(string username, string refreshToken);
+        void DeleteRefreshToken(string username);
     }
 }

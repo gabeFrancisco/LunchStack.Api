@@ -48,7 +48,7 @@ namespace LunchStack.Api.Controllers
             try
             {
                 _httpAccessor.HttpContext!.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
-                Console.WriteLine(refreshToken);
+                Console.WriteLine("RT: " + refreshToken);
                 return Ok(_authService.Refresh(token, refreshToken!));
             }
             catch (Exception ex)
