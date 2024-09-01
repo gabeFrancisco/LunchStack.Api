@@ -4,9 +4,9 @@ namespace LunchStack.Api.Models.Interfaces
 {
     public interface IUserService : IBaseService<UserDTO>
     {
-        Task<bool> UpdateUserLastWorkGroupId(Guid workGroupId);
+        Task<bool> UpdateUserLastWorkGroupId(int workGroupId);
         Task<User> GetActualUser();
-        Task<User> GetSingleUserAsync(Guid id);
+        Task<User> GetSingleUserAsync(int id);
         Guid SelectedWorkgGroup { get; }
     }
 }

@@ -3,6 +3,7 @@ using LunchStack.Api.Context;
 using LunchStack.Api.Models;
 using LunchStack.Api.Models.DTOs;
 using LunchStack.Api.Models.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace LunchStack.Api.Services
 {
@@ -38,7 +39,7 @@ namespace LunchStack.Api.Services
             return userDto;
         }
 
-        public Task<bool> DeleteAsync(Guid id)
+        public Task<bool> DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -53,22 +54,24 @@ namespace LunchStack.Api.Services
             throw new NotImplementedException();
         }
 
-        public Task<UserDTO> GetAsync(Guid id)
+        public Task<UserDTO> GetAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<User> GetSingleUserAsync(Guid id)
+        public async Task<User> GetSingleUserAsync(int id)
+        {
+#pragma warning disable CS8603 // Possible null reference return.
+            return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+#pragma warning restore CS8603 // Possible null reference return.
+        }
+
+        public Task<UserDTO> UpdateAsync(UserDTO entity, int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<UserDTO> UpdateAsync(UserDTO entity, Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateUserLastWorkGroupId(Guid workGroupId)
+        public Task<bool> UpdateUserLastWorkGroupId(int workGroupId)
         {
             throw new NotImplementedException();
         }

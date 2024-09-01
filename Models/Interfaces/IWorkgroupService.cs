@@ -4,7 +4,7 @@ namespace LunchStack.Api.Models.Interfaces
 {
     public interface IWorkgroupService : IBaseService<WorkgroupDTO>
     {
-        Task<WorkgroupDTO> SelectWorkGroup(Guid id);
+        Task<WorkgroupDTO> SelectWorkGroup(int id);
         Task<WorkgroupDTO> GetActualWorkGroup();
         string GetActualWorkGroupId();
     }

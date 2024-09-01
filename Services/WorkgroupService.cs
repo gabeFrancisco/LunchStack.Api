@@ -9,18 +9,20 @@ namespace LunchStack.Api.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpAccessor;
 
-        public WorkgroupService(AppDbContext context, IMapper mapper)
+        public WorkgroupService(AppDbContext context, IMapper mapper, IHttpContextAccessor httpAccessor)
         {
             _context = context;
             _mapper = mapper;
+            _httpAccessor = httpAccessor;
         }
         public Task<WorkgroupDTO> CreateAsync(WorkgroupDTO entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteAsync(Guid id)
+        public Task<bool> DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -40,17 +42,17 @@ namespace LunchStack.Api.Services
             throw new NotImplementedException();
         }
 
-        public Task<WorkgroupDTO> GetAsync(Guid id)
+        public Task<WorkgroupDTO> GetAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<WorkgroupDTO> SelectWorkGroup(Guid id)
+        public Task<WorkgroupDTO> SelectWorkGroup(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<WorkgroupDTO> UpdateAsync(WorkgroupDTO entity, Guid id)
+        public Task<WorkgroupDTO> UpdateAsync(WorkgroupDTO entity, int id)
         {
             throw new NotImplementedException();
         }
