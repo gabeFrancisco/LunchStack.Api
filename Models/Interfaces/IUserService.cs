@@ -8,5 +8,6 @@ namespace LunchStack.Api.Models.Interfaces
         Task<User> GetActualUser();
         Task<User> GetSingleUserAsync(int id);
         Guid SelectedWorkgGroup { get; }
+        int UserId { get; }
     }
 }

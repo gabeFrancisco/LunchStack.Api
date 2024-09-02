@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AutoMapper;
 using LunchStack.Api.Context;
 using LunchStack.Api.Models;
@@ -11,12 +12,21 @@ namespace LunchStack.Api.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        public UserService(AppDbContext context, IMapper mapper)
+        private readonly IHttpContextAccessor _httpAccessor;
+        public UserService(AppDbContext context, IMapper mapper, IHttpContextAccessor httpAccessor)
         {
             _context = context;
             _mapper = mapper;
+            _httpAccessor = httpAccessor;
         }
         public Guid SelectedWorkgGroup => throw new NotImplementedException();
+
+        public int UserId => Int32.Parse(_httpAccessor
+            .HttpContext
+            .User
+            .Claims
+            .FirstOrDefault(i => i.Type == ClaimTypes.NameIdentifier)
+            .Value);
 
         public async Task<UserDTO> CreateAsync(UserDTO userDto)
         {
