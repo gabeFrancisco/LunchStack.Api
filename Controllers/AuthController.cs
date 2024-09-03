@@ -63,7 +63,7 @@ namespace LunchStack.Api.Controllers
         {
             try
             {
-                return Ok("God bless you!");
+                return Ok("God blss you!");
             }
             catch (Exception ex)
             {

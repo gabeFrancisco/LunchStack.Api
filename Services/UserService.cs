@@ -54,9 +54,11 @@ namespace LunchStack.Api.Services
             throw new NotImplementedException();
         }
 
-        public Task<User> GetActualUser()
+         public async Task<UserDTO> GetActualUser()
         {
-            throw new NotImplementedException();
+            var user = await this.GetSingleUserAsync(UserId);
+            user.Password = "";
+            return _mapper.Map<User, UserDTO>(user);
         }
 
         public Task<IEnumerable<UserDTO>> GetAllAsync()
@@ -72,7 +74,9 @@ namespace LunchStack.Api.Services
         public async Task<User> GetSingleUserAsync(int id)
         {
 #pragma warning disable CS8603 // Possible null reference return.
-            return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
