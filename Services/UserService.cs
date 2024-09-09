@@ -54,11 +54,11 @@ namespace LunchStack.Api.Services
             throw new NotImplementedException();
         }
 
-         public async Task<UserDTO> GetActualUser()
+         public async Task<User> GetActualUser()
         {
             var user = await this.GetSingleUserAsync(UserId);
             user.Password = "";
-            return _mapper.Map<User, UserDTO>(user);
+            return user;
         }
 
         public Task<IEnumerable<UserDTO>> GetAllAsync()

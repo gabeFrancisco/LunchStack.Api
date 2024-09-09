@@ -4,6 +4,7 @@ using LunchStack.Api.Models;
 using LunchStack.Api.Models.DTOs;
 using LunchStack.Api.Models.Enums;
 using LunchStack.Api.Models.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace LunchStack.Api.Services
 {
@@ -14,7 +15,10 @@ namespace LunchStack.Api.Services
         private readonly IHttpContextAccessor _httpAccessor;
         private readonly IUserService _userService;
 
-        public WorkgroupService(AppDbContext context, IMapper mapper, IHttpContextAccessor httpAccessor, IUserService userService)
+        public WorkgroupService(AppDbContext context,
+                                IMapper mapper,
+                                IHttpContextAccessor httpAccessor,
+                                IUserService userService)
         {
             _context = context;
             _mapper = mapper;
@@ -82,9 +86,21 @@ namespace LunchStack.Api.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<WorkgroupDTO>> GetAllAsync()
+        public async Task<IEnumerable<WorkgroupDTO>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var workgroups = await this.GetAll();
+            return _mapper.Map<IEnumerable<WorkgroupDTO>>(workgroups);
+        }
+
+        private async Task<IEnumerable<Workgroup?>> GetAll()
+        {
+            var actualUser = await _userService.GetActualUser();
+            return await _context.UserWorkgroups
+                .Where(uwg => uwg.UserId == actualUser.Id)
+                .Include(uwg => uwg.Workgroup)
+                .Select(uwg => uwg.Workgroup)
+                .Distinct()
+                .ToListAsync();
         }
 
         public Task<WorkgroupDTO> GetAsync(int id)
