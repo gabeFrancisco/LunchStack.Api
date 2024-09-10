@@ -69,7 +69,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
-{
+{   
     // c.SwaggerDoc("v1", new OpenApiInfo { Title = "RecantosSystem.Api", Version = "v1" });
     // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -113,8 +113,6 @@ builder.Services.AddCors(options =>
             .AllowCredentials();
     });
 });
-
-
 
 var app = builder.Build();
 

@@ -22,7 +22,9 @@ namespace LunchStack.Api.Controllers
         {
             try
             {
-                return Ok(await _userService.GetActualUser());
+                var user = await _userService.GetActualUser();
+                user.Password = "";
+                return Ok(user);
             }
             catch (Exception ex)
             {

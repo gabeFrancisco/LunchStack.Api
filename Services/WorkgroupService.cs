@@ -45,7 +45,7 @@ namespace LunchStack.Api.Services
             var workersIds = entity.Members;
             workersIds.Add(actualUser.Id);
 
-            if (workersIds.Any())
+            if (workersIds.Count != 0)
             {
                 foreach (var id in workersIds)
                 {

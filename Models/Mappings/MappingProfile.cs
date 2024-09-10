@@ -8,6 +8,7 @@ namespace LunchStack.Api.Models.Mappings
         public MappingProfile()
         {
             CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<Workgroup, WorkgroupDTO>().ReverseMap();
         }
     }
 }

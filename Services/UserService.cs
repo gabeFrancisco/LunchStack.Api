@@ -21,7 +21,7 @@ namespace LunchStack.Api.Services
         }
         public Guid SelectedWorkgGroup => throw new NotImplementedException();
 
-        public int UserId => Int32.Parse(_httpAccessor
+        public int UserId => int.Parse(_httpAccessor
             .HttpContext
             .User
             .Claims
@@ -75,7 +75,6 @@ namespace LunchStack.Api.Services
         {
 #pragma warning disable CS8603 // Possible null reference return.
             return await _context.Users
-                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
 #pragma warning restore CS8603 // Possible null reference return.
         }
