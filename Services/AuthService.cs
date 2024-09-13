@@ -48,8 +48,6 @@ namespace LunchStack.Api.Services
                 throw new InvalidOperationException("Password is incorrect!");
             }
 
-            user.Password = "";
-
             var token = _tokenService.GenerateToken(user.Username, user.Id.ToString());
             var refreshToken = _tokenService.GenerateRefreshToken();
             _tokenService.DeleteRefreshToken(user.Username);
@@ -64,9 +62,12 @@ namespace LunchStack.Api.Services
                 Expires = DateTime.UtcNow.AddMonths(6),
             });
 
+            var userDto = _mapper.Map<User, UserDTO>(user);
+            userDto.Password = "";
+
             return new
             {
-                User = user,
+                User = userDto,
                 Token = token,
                 Message = $"The user {user.Username} is logged succesfully!"
             };
