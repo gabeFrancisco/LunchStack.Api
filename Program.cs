@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Text;
 using AutoMapper;
 using LunchStack.Api.Context;
+using LunchStack.Api.Filters;
 using LunchStack.Api.Models.Interfaces;
 using LunchStack.Api.Models.Mappings;
 using LunchStack.Api.Services;
@@ -66,10 +67,15 @@ builder.Services.AddAuthentication(x =>
 });
 
 builder.Services.AddAuthorization();
-builder.Services.AddControllers();
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<WorkgroupHeaderAttribute>();
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
-{   
+{
     // c.SwaggerDoc("v1", new OpenApiInfo { Title = "RecantosSystem.Api", Version = "v1" });
     // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -80,7 +86,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",  
+        Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
         Description = "JWT Auth header using the Bearer scheme"
