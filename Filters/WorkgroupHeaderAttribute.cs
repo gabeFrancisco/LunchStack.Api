@@ -12,18 +12,19 @@ namespace LunchStack.Api.Filters
         private IUserService? _userService;
         public async Task OnResourceExecutionAsync(ResourceExecutingContext context, ResourceExecutionDelegate next)
         {
-            _userService = (IUserService)context.HttpContext.RequestServices.GetService(typeof(IUserService))!;
-            var user = await _userService.GetActualUser() ?? null;
+            try
+            {
+                _userService = (IUserService)context.HttpContext.RequestServices.GetService(typeof(IUserService))!;
+                var user = await _userService.GetActualUser() ?? null;
 
-            if (user == null)
-            {
-                await next();
-            }
-            else
-            {
                 context.HttpContext.Response.Headers["workgroup-id"] = user.LastUserWorkgroup.ToString();
                 await next();
             }
+            catch(NullReferenceException)
+            {
+                await next();
+            }
+
         }
     }
 }
