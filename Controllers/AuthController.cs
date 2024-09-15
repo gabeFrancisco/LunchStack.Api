@@ -20,55 +20,27 @@ namespace LunchStack.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDTO userDto)
         {
-            try
-            {
-                return Ok(await _authService.Register(userDto));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(await _authService.Register(userDto));
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
-            try
-            {
-                return Ok(await _authService.Login(loginDto));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(await _authService.Login(loginDto));
         }
         [HttpPost("refresh")]
         public IActionResult Refresh(string token)
         {
-            try
-            {
-                _httpAccessor.HttpContext!.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
-                Console.WriteLine("RT: " + refreshToken);
-                return Ok(_authService.Refresh(token, refreshToken!));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            _httpAccessor.HttpContext!.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
+            Console.WriteLine("RT: " + refreshToken);
+            return Ok(_authService.Refresh(token, refreshToken!));
         }
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = "Bearer")]
         public IActionResult Get()
         {
-            try
-            {
-                return Ok("God blss you!");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok("God blss you!");
         }
 
 

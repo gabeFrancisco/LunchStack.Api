@@ -70,6 +70,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddControllers(options =>
 {
+    options.Filters.Add<ExceptionResponseAttribute>();
     options.Filters.Add<WorkgroupHeaderAttribute>();
 });
 
