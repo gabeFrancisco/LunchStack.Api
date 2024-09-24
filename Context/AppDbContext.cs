@@ -10,6 +10,11 @@ namespace LunchStack.Api.Context
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<UserWorkgroup> UserWorkgroups { get; set; }
         public DbSet<Workgroup> Workgroups { get; set; }
-
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<OrderSheet> OrderSheets { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductOrder> ProductOrders { get; set; }
+        public DbSet<Table> Tables { get; set; }
     }
 }

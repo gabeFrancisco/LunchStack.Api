@@ -22,7 +22,7 @@ namespace LunchStack.Api.Services
             _mapper = mapper;
             _userService = userService;
         }
-        public Task<CategoryDTO> CreateAsync(CategoryDTO entity)
+        public async Task<CategoryDTO> CreateAsync(CategoryDTO entity)
         {
             if (entity is null)
             {
@@ -32,6 +32,11 @@ namespace LunchStack.Api.Services
             var category = _mapper.Map<CategoryDTO, Category>(entity);
             category.WorkgroupId = this.WorkgroupId;
             category.CreatedAt = DateTime.UtcNow;
+
+            _context.Categories.Add(category);
+            await _context.SaveChangesAsync();
+
+            return entity;
         }
 
         public Task<bool> DeleteAsync(int id)
