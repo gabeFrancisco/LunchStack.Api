@@ -19,7 +19,11 @@ namespace LunchStack.Api.Services
             _mapper = mapper;
             _httpAccessor = httpAccessor;
         }
-        public Guid SelectedWorkgGroup => throw new NotImplementedException();
+        public int SelectedWorkgGroup => Int32.Parse(_httpAccessor
+            .HttpContext
+            .Response
+            .Headers
+            .FirstOrDefault(x => x.Key == "x-workgroup-id").Value!);
 
         public int UserId => int.Parse(_httpAccessor
             .HttpContext
@@ -54,7 +58,7 @@ namespace LunchStack.Api.Services
             throw new NotImplementedException();
         }
 
-         public async Task<User> GetActualUser()
+        public async Task<User> GetActualUser()
         {
             var user = await this.GetSingleUserAsync(UserId);
             user.Password = "";

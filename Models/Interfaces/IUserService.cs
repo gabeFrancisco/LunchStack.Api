@@ -7,7 +7,7 @@ namespace LunchStack.Api.Models.Interfaces
         Task<bool> UpdateUserLastWorkGroupId(int workGroupId);
         Task<User> GetActualUser();
         Task<User> GetSingleUserAsync(int id);
-        Guid SelectedWorkgGroup { get; }
+        int SelectedWorkgGroup { get; }
         int UserId { get; }
     }
 }
