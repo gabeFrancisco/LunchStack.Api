@@ -20,6 +20,12 @@ namespace LunchStack.Api.Controllers
             _categoryService = categoryService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            return Ok(await _categoryService.GetAllAsync());
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CategoryDTO dto)
         {

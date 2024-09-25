@@ -7,6 +7,7 @@ using LunchStack.Api.Context;
 using LunchStack.Api.Models;
 using LunchStack.Api.Models.DTOs;
 using LunchStack.Api.Models.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace LunchStack.Api.Services
 {
@@ -44,9 +45,13 @@ namespace LunchStack.Api.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<CategoryDTO>> GetAllAsync()
+        public async Task<IEnumerable<CategoryDTO>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var categories = await _context.Categories
+                .Where(cat => cat.WorkgroupId == this.WorkgroupId)
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<CategoryDTO>>(categories);
         }
 
         public Task<CategoryDTO> GetAsync(int id)
