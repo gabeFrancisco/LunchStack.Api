@@ -1,10 +1,12 @@
 using LunchStack.Api.Models.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LunchStack.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -12,6 +14,7 @@ namespace LunchStack.Api.Controllers
         {
             _userService = userService;
         }
+
 
         [HttpGet("actualUser")]
         public async Task<IActionResult> Get()

@@ -10,7 +10,7 @@ namespace LunchStack.Api.Models.DTOs
         public int Id { get; set; }
         public required string Name { get; set; }
         public int CategoryId { get; set; }
-        public required virtual CategoryDTO Category { get; set; }
+        public virtual CategoryDTO? Category { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
     }

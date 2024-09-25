@@ -79,6 +79,7 @@ namespace LunchStack.Api.Services
         {
 #pragma warning disable CS8603 // Possible null reference return.
             return await _context.Users
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
 #pragma warning restore CS8603 // Possible null reference return.
         }

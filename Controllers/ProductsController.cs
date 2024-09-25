@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LunchStack.Api.Models.DTOs;
 using LunchStack.Api.Models.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LunchStack.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -16,5 +19,18 @@ namespace LunchStack.Api.Controllers
         {
             _productService = productService;
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(await _productService.GetAllAsync());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] ProductDTO dto)
+        {
+            return Ok(await _productService.CreateAsync(dto));
+        }
+
     }
 }
