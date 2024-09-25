@@ -53,18 +53,6 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
     };
-    // options.Events = new JwtBearerEvents
-    // {
-    //     OnMessageReceived = ctx =>
-    //     {
-    //         ctx.Request.Cookies.TryGetValue("refreshToken", out var accessToken);
-    //         if (!string.IsNullOrEmpty(accessToken))
-    //         {
-    //             ctx.Token = accessToken;
-    //         }
-    //         return Task.CompletedTask;
-    //     }
-    // };
 });
 
 builder.Services.AddAuthorization();
@@ -78,12 +66,6 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    // c.SwaggerDoc("v1", new OpenApiInfo { Title = "RecantosSystem.Api", Version = "v1" });
-    // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
-    // c.IncludeXmlComments(xmlPath);
-
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
