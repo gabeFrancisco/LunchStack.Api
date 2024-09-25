@@ -23,7 +23,7 @@ namespace LunchStack.Api.Services
             .HttpContext
             .Response
             .Headers
-            .FirstOrDefault(x => x.Key == "x-workgroup-id").Value!);
+            .FirstOrDefault(x => x.Key == "workgroup-id").Value!);
 
         public int UserId => int.Parse(_httpAccessor
             .HttpContext
