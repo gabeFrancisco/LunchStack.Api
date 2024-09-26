@@ -13,7 +13,7 @@ namespace LunchStack.Api.Models
 		public required virtual Table Table { get; set; }
 		public required IEnumerable<ProductOrder> ProductOrders { get; set; }
 		public int CustomerId { get; set; }
-		public virtual Customer Customer { get; set; }
+		public required virtual Customer Customer { get; set; }
 		public required string OpenBy { get; set; }
 		public required virtual Workgroup Workgroup { get; set; }
 		public int WorkGroupId { get; set; }
