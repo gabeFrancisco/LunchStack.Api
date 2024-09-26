@@ -50,6 +50,7 @@ namespace LunchStack.Api.Services
         {
             var products = await _context.Products
                 .Where(p => p.WorkgroupId == this.WorkgroupId)
+                .Include(p => p.Category)
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
