@@ -27,7 +27,8 @@ namespace LunchStack.Api.Services
 
         public async Task<TableDTO> CreateAsync(TableDTO entity)
         {
-            if(entity is null){
+            if (entity is null)
+            {
                 throw new NullReferenceException("DTO cannot be null");
             }
 
@@ -48,16 +49,26 @@ namespace LunchStack.Api.Services
 
         public async Task<IEnumerable<TableDTO>> GetAllAsync()
         {
-             var tables = await _context.Tables
-                .Where(t => t.WorkGroupId == this.WorkgroupId)
-                .ToListAsync();
+            var tables = await _context.Tables
+               .Where(t => t.WorkGroupId == this.WorkgroupId)
+               .ToListAsync();
 
             return _mapper.Map<IEnumerable<TableDTO>>(tables);
         }
 
-        public Task<TableDTO> GetAsync(int id)
+        public async Task<TableDTO> GetAsync(int id)
         {
-           throw new NotImplementedException();
+            var table = await this.GetSingleTableAsync(id);
+            return _mapper.Map<Table, TableDTO>(table);
+        }
+
+        private async Task<Table> GetSingleTableAsync(int id)
+        {
+#pragma warning disable CS8603 // Possible null reference return.
+            return await _context.Tables
+                .AsNoTracking()
+                .FirstOrDefaultAsync(t => t.Id == id);
+#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public Task<TableDTO> UpdateAsync(TableDTO entity, int id)
