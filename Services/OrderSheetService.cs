@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using LunchStack.Api.Context;
+using LunchStack.Api.Models;
 using LunchStack.Api.Models.DTOs;
 using LunchStack.Api.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -22,9 +24,39 @@ namespace LunchStack.Api.Services
             _userService = userService;
         }
         private int WorkgroupId => _userService.SelectedWorkgGroup;
-        public Task<OrderSheetDTO> CreateAsync(OrderSheetDTO entity)
+
+        public async Task<OrderSheetDTO> CreateAsync(OrderSheetDTO entity)
         {
-            throw new NotImplementedException();
+            if (entity is null)
+            {
+                throw new NullReferenceException("DTO cannot be null!");
+            }
+
+            var orderSheet = _mapper.Map<OrderSheetDTO, OrderSheet>(entity);
+            orderSheet.Table = await _context.Tables.
+                FirstOrDefaultAsync(t => t.Id == entity.TableId);
+
+            if (entity.CustomerId != null)
+            {
+                orderSheet.Customer = await _context.Customers
+                    .FirstOrDefaultAsync(c => c.Id == entity.CustomerId) ?? null;
+            }
+
+            foreach (var order in orderSheet.ProductOrders)
+            {
+                order.CreatedAt = DateTime.UtcNow;
+                order.WorkGroupId = this.WorkgroupId;
+                order.Product = null;
+            }
+
+            orderSheet.WorkGroupId = this.WorkgroupId;
+            orderSheet.CreatedAt = DateTime.UtcNow;
+            orderSheet.OpenBy = _userService.GetActualUser().Result.Username;
+
+            _context.OrderSheets.Add(orderSheet);
+            await _context.SaveChangesAsync();
+
+            return entity;
         }
 
         public Task<bool> DeleteAsync(int id)
@@ -46,7 +78,7 @@ namespace LunchStack.Api.Services
             return _mapper.Map<IEnumerable<OrderSheetDTO>>(orderSheets);
         }
 
-        public async Task<OrderSheetDTO> GetAsync(int id)
+        public Task<OrderSheetDTO> GetAsync(int id)
         {
             throw new NotImplementedException();
         }
