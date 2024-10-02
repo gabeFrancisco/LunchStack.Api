@@ -37,7 +37,7 @@ namespace LunchStack.Api.Services
             orderSheet.Table = await _context.Tables.
                 FirstOrDefaultAsync(t => t.Id == entity.TableId);
 
-            if (entity.CustomerId > 0)
+            if (entity.CustomerId is null || entity.CustomerId > 0)
             {
                 orderSheet.Customer = await _context.Customers
                     .FirstOrDefaultAsync(c => c.Id == entity.CustomerId) ?? null;
@@ -47,6 +47,8 @@ namespace LunchStack.Api.Services
                 var customer = _mapper.Map<CustomerDTO, Customer>(entity.Customer);
                 customer.CreatedAt = DateTime.UtcNow;
                 customer.WorkgroupId = this.WorkgroupId;
+                orderSheet.Customer = customer;
+                _context.Customers.Add(customer);
             }
 
             foreach (var order in orderSheet.ProductOrders)

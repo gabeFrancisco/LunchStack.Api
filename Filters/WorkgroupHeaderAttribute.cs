@@ -18,13 +18,15 @@ namespace LunchStack.Api.Filters
                 var user = await _userService.GetActualUser() ?? null;
 
                 context.HttpContext.Response.Headers["workgroup-id"] = user.LastUserWorkgroup.ToString();
+                if(user.LastUserWorkgroup.ToString() is null){
+                    throw new AccessViolationException("You must set a workgroup id on HTTP header");
+                }
                 await next();
             }
             catch(NullReferenceException)
             {
                 await next();
             }
-
         }
     }
 }

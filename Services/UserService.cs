@@ -61,7 +61,6 @@ namespace LunchStack.Api.Services
         public async Task<User> GetActualUser()
         {
             var user = await this.GetSingleUserAsync(UserId);
-            user.Password = "";
             return user;
         }
 
@@ -77,11 +76,9 @@ namespace LunchStack.Api.Services
 
         public async Task<User> GetSingleUserAsync(int id)
         {
-#pragma warning disable CS8603 // Possible null reference return.
             return await _context.Users
-                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
-#pragma warning restore CS8603 // Possible null reference return.
+
         }
 
         public Task<UserDTO> UpdateAsync(UserDTO entity, int id)
