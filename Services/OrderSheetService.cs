@@ -47,7 +47,7 @@ namespace LunchStack.Api.Services
                 var customer = _mapper.Map<CustomerDTO, Customer>(entity.Customer);
                 customer.CreatedAt = DateTime.UtcNow;
                 customer.WorkgroupId = this.WorkgroupId;
-                orderSheet.Customer = customer;
+                orderSheet.Customer = customer!;
                 _context.Customers.Add(customer);
             }
 

@@ -26,7 +26,8 @@ namespace LunchStack.Api.Services
         private int WorkgroupId => this._userService.SelectedWorkgGroup;
         public async Task<ProductDTO> CreateAsync(ProductDTO entity)
         {
-            if(entity is null){
+            if (entity is null)
+            {
                 throw new NullReferenceException("DTO cannot be null");
             }
 
@@ -56,9 +57,16 @@ namespace LunchStack.Api.Services
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }
 
-        public Task<ProductDTO> GetAsync(int id)
+        public async Task<ProductDTO> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            var product = await this.GetSingleProductAsync(id);
+            return _mapper.Map<Product, ProductDTO>(product);
+        }
+
+        public async Task<Product> GetSingleProductAsync(int id)
+        {
+            return await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public Task<ProductDTO> UpdateAsync(ProductDTO entity, int id)

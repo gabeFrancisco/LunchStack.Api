@@ -62,13 +62,10 @@ namespace LunchStack.Api.Services
             return _mapper.Map<Table, TableDTO>(table);
         }
 
-        private async Task<Table> GetSingleTableAsync(int id)
+        public async Task<Table> GetSingleTableAsync(int id)
         {
-#pragma warning disable CS8603 // Possible null reference return.
             return await _context.Tables
-                .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == id);
-#pragma warning restore CS8603 // Possible null reference return.
         }
 
         public Task<TableDTO> UpdateAsync(TableDTO entity, int id)
