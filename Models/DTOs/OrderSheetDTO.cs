@@ -13,7 +13,7 @@ namespace LunchStack.Api.Models.DTOs
         public int Id { get; set; }
         public int TableId { get; set; }
         public virtual TableDTO? Table { get; set; }
-		public IEnumerable<ProductOrderDTO> ProductOrders { get; set; }
+		public IEnumerable<ProductOrderDTO>? ProductOrders { get; set; }
 		public int? CustomerId { get; set; }
         public required CustomerDTO Customer { get; set; }
         public string? OpenBy { get; set; }

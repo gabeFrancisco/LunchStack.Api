@@ -7,11 +7,70 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LunchStack.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class Entities : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "RefreshTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    Token = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshTokens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    Password = table.Column<string>(type: "text", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false),
+                    LastUserWorkgroup = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Workgroups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Workgroups", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Workgroups_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
@@ -44,7 +103,7 @@ namespace LunchStack.Api.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    WorkGroupId = table.Column<int>(type: "integer", nullable: false),
+                    WorkgroupId = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -52,8 +111,8 @@ namespace LunchStack.Api.Migrations
                 {
                     table.PrimaryKey("PK_Customers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Customers_Workgroups_WorkGroupId",
-                        column: x => x.WorkGroupId,
+                        name: "FK_Customers_Workgroups_WorkgroupId",
+                        column: x => x.WorkgroupId,
                         principalTable: "Workgroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -68,7 +127,7 @@ namespace LunchStack.Api.Migrations
                     Number = table.Column<int>(type: "integer", nullable: false),
                     Chairs = table.Column<int>(type: "integer", nullable: false),
                     IsBusy = table.Column<bool>(type: "boolean", nullable: false),
-                    WorkGroupId = table.Column<int>(type: "integer", nullable: false),
+                    WorkgroupId = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -76,8 +135,36 @@ namespace LunchStack.Api.Migrations
                 {
                     table.PrimaryKey("PK_Tables", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Tables_Workgroups_WorkGroupId",
-                        column: x => x.WorkGroupId,
+                        name: "FK_Tables_Workgroups_WorkgroupId",
+                        column: x => x.WorkgroupId,
+                        principalTable: "Workgroups",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserWorkgroups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    WorkgroupId = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserWorkgroups", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserWorkgroups_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserWorkgroups_Workgroups_WorkgroupId",
+                        column: x => x.WorkgroupId,
                         principalTable: "Workgroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -124,7 +211,7 @@ namespace LunchStack.Api.Migrations
                     TableId = table.Column<int>(type: "integer", nullable: false),
                     CustomerId = table.Column<int>(type: "integer", nullable: false),
                     OpenBy = table.Column<string>(type: "text", nullable: false),
-                    WorkGroupId = table.Column<int>(type: "integer", nullable: false),
+                    WorkgroupId = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -144,8 +231,8 @@ namespace LunchStack.Api.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderSheets_Workgroups_WorkGroupId",
-                        column: x => x.WorkGroupId,
+                        name: "FK_OrderSheets_Workgroups_WorkgroupId",
+                        column: x => x.WorkgroupId,
                         principalTable: "Workgroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -160,7 +247,7 @@ namespace LunchStack.Api.Migrations
                     OrderSheetId = table.Column<int>(type: "integer", nullable: false),
                     ProductId = table.Column<int>(type: "integer", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
-                    WorkGroupId = table.Column<int>(type: "integer", nullable: false),
+                    WorkgroupId = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -180,8 +267,8 @@ namespace LunchStack.Api.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductOrders_Workgroups_WorkGroupId",
-                        column: x => x.WorkGroupId,
+                        name: "FK_ProductOrders_Workgroups_WorkgroupId",
+                        column: x => x.WorkgroupId,
                         principalTable: "Workgroups",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -193,9 +280,9 @@ namespace LunchStack.Api.Migrations
                 column: "WorkgroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Customers_WorkGroupId",
+                name: "IX_Customers_WorkgroupId",
                 table: "Customers",
-                column: "WorkGroupId");
+                column: "WorkgroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderSheets_CustomerId",
@@ -208,9 +295,9 @@ namespace LunchStack.Api.Migrations
                 column: "TableId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderSheets_WorkGroupId",
+                name: "IX_OrderSheets_WorkgroupId",
                 table: "OrderSheets",
-                column: "WorkGroupId");
+                column: "WorkgroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductOrders_OrderSheetId",
@@ -223,9 +310,9 @@ namespace LunchStack.Api.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductOrders_WorkGroupId",
+                name: "IX_ProductOrders_WorkgroupId",
                 table: "ProductOrders",
-                column: "WorkGroupId");
+                column: "WorkgroupId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -238,9 +325,24 @@ namespace LunchStack.Api.Migrations
                 column: "WorkgroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tables_WorkGroupId",
+                name: "IX_Tables_WorkgroupId",
                 table: "Tables",
-                column: "WorkGroupId");
+                column: "WorkgroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserWorkgroups_UserId",
+                table: "UserWorkgroups",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserWorkgroups_WorkgroupId",
+                table: "UserWorkgroups",
+                column: "WorkgroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Workgroups_UserId",
+                table: "Workgroups",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -248,6 +350,12 @@ namespace LunchStack.Api.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ProductOrders");
+
+            migrationBuilder.DropTable(
+                name: "RefreshTokens");
+
+            migrationBuilder.DropTable(
+                name: "UserWorkgroups");
 
             migrationBuilder.DropTable(
                 name: "OrderSheets");
@@ -263,6 +371,12 @@ namespace LunchStack.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Workgroups");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

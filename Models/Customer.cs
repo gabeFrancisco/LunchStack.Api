@@ -12,6 +12,6 @@ namespace LunchStack.Api.Models
 		public required string Phone { get; set; }
 		public required string Email { get; set; }
 		public required virtual Workgroup Workgroup { get; set; }
-		public int WorkGroupId { get; set; }
+		public int WorkgroupId { get; set; }
     }
 }

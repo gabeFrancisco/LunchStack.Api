@@ -33,7 +33,7 @@ namespace LunchStack.Api.Services
             }
 
             var table = _mapper.Map<TableDTO, Table>(entity);
-            table.WorkGroupId = this.WorkgroupId;
+            table.WorkgroupId = this.WorkgroupId;
             table.CreatedAt = DateTime.UtcNow;
 
             _context.Tables.Add(table);
@@ -50,7 +50,7 @@ namespace LunchStack.Api.Services
         public async Task<IEnumerable<TableDTO>> GetAllAsync()
         {
             var tables = await _context.Tables
-               .Where(t => t.WorkGroupId == this.WorkgroupId)
+               .Where(t => t.WorkgroupId == this.WorkgroupId)
                .ToListAsync();
 
             return _mapper.Map<IEnumerable<TableDTO>>(tables);

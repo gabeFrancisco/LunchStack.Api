@@ -17,6 +17,6 @@ namespace LunchStack.Api.Models
 			get => Quantity * Product.Price;
 		}
 		public required virtual Workgroup Workgroup { get; set; }
-		public int WorkGroupId { get; set; }
+		public int WorkgroupId { get; set; }
     }
 }

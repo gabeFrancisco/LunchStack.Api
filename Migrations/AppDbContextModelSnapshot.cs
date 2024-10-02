@@ -80,12 +80,12 @@ namespace LunchStack.Api.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("WorkGroupId")
+                    b.Property<int>("WorkgroupId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WorkGroupId");
+                    b.HasIndex("WorkgroupId");
 
                     b.ToTable("Customers");
                 });
@@ -117,7 +117,7 @@ namespace LunchStack.Api.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("WorkGroupId")
+                    b.Property<int>("WorkgroupId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -126,7 +126,7 @@ namespace LunchStack.Api.Migrations
 
                     b.HasIndex("TableId");
 
-                    b.HasIndex("WorkGroupId");
+                    b.HasIndex("WorkgroupId");
 
                     b.ToTable("OrderSheets");
                 });
@@ -194,7 +194,7 @@ namespace LunchStack.Api.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("WorkGroupId")
+                    b.Property<int>("WorkgroupId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -203,7 +203,7 @@ namespace LunchStack.Api.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("WorkGroupId");
+                    b.HasIndex("WorkgroupId");
 
                     b.ToTable("ProductOrders");
                 });
@@ -258,12 +258,12 @@ namespace LunchStack.Api.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("WorkGroupId")
+                    b.Property<int>("WorkgroupId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WorkGroupId");
+                    b.HasIndex("WorkgroupId");
 
                     b.ToTable("Tables");
                 });
@@ -385,7 +385,7 @@ namespace LunchStack.Api.Migrations
                 {
                     b.HasOne("LunchStack.Api.Models.Workgroup", "Workgroup")
                         .WithMany()
-                        .HasForeignKey("WorkGroupId")
+                        .HasForeignKey("WorkgroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -408,7 +408,7 @@ namespace LunchStack.Api.Migrations
 
                     b.HasOne("LunchStack.Api.Models.Workgroup", "Workgroup")
                         .WithMany()
-                        .HasForeignKey("WorkGroupId")
+                        .HasForeignKey("WorkgroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -454,7 +454,7 @@ namespace LunchStack.Api.Migrations
 
                     b.HasOne("LunchStack.Api.Models.Workgroup", "Workgroup")
                         .WithMany()
-                        .HasForeignKey("WorkGroupId")
+                        .HasForeignKey("WorkgroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -469,7 +469,7 @@ namespace LunchStack.Api.Migrations
                 {
                     b.HasOne("LunchStack.Api.Models.Workgroup", "Workgroup")
                         .WithMany()
-                        .HasForeignKey("WorkGroupId")
+                        .HasForeignKey("WorkgroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

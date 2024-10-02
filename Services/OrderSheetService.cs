@@ -33,23 +33,30 @@ namespace LunchStack.Api.Services
             }
 
             var orderSheet = _mapper.Map<OrderSheetDTO, OrderSheet>(entity);
+         
             orderSheet.Table = await _context.Tables.
                 FirstOrDefaultAsync(t => t.Id == entity.TableId);
 
-            if (entity.CustomerId != null)
+            if (entity.CustomerId > 0)
             {
                 orderSheet.Customer = await _context.Customers
                     .FirstOrDefaultAsync(c => c.Id == entity.CustomerId) ?? null;
+            }
+            else
+            {
+                var customer = _mapper.Map<CustomerDTO, Customer>(entity.Customer);
+                customer.CreatedAt = DateTime.UtcNow;
+                customer.WorkgroupId = this.WorkgroupId;
             }
 
             foreach (var order in orderSheet.ProductOrders)
             {
                 order.CreatedAt = DateTime.UtcNow;
-                order.WorkGroupId = this.WorkgroupId;
+                order.WorkgroupId = this.WorkgroupId;
                 order.Product = null;
             }
 
-            orderSheet.WorkGroupId = this.WorkgroupId;
+            orderSheet.WorkgroupId = this.WorkgroupId;
             orderSheet.CreatedAt = DateTime.UtcNow;
             orderSheet.OpenBy = _userService.GetActualUser().Result.Username;
 
@@ -67,7 +74,7 @@ namespace LunchStack.Api.Services
         public async Task<IEnumerable<OrderSheetDTO>> GetAllAsync()
         {
             var orderSheets = await _context.OrderSheets
-                .Where(os => os.WorkGroupId == this.WorkgroupId)
+                .Where(os => os.WorkgroupId == this.WorkgroupId)
                 .Include(os => os.Customer)
                 .Include(os => os.Table)
                 .Include(os => os.ProductOrders)
