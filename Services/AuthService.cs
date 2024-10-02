@@ -62,6 +62,15 @@ namespace LunchStack.Api.Services
                 Expires = DateTime.UtcNow.AddMonths(6),
             });
 
+             _httpContext.HttpContext!.Response.Cookies.Append("accessToken", token, new CookieOptions
+            {
+                HttpOnly = true,
+                IsEssential = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(10),
+            });
+
             var userDto = _mapper.Map<User, UserDTO>(user);
             userDto.Password = "";
 
@@ -95,6 +104,15 @@ namespace LunchStack.Api.Services
                 Secure = true,
                 SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddMonths(6),
+            });
+
+             _httpContext.HttpContext!.Response.Cookies.Append("accessToken", newJwtToken, new CookieOptions
+            {
+                HttpOnly = true,
+                IsEssential = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(10),
             });
 
             return new

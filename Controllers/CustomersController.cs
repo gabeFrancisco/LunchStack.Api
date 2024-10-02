@@ -12,7 +12,7 @@ namespace LunchStack.Api.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerService _customerService;
-        public CustomersController(ICustomerService customerService)
+        public CustomersController(ICustomerService customerService     )
         {
             _customerService = customerService;
         }
