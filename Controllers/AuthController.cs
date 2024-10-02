@@ -29,11 +29,11 @@ namespace LunchStack.Api.Controllers
             return Ok(await _authService.Login(loginDto));
         }
         [HttpPost("refresh")]
-        public IActionResult Refresh(string token)
+        public IActionResult Refresh()
         {
+            _httpAccessor.HttpContext!.Request.Cookies.TryGetValue("accessToken", out var token);
             _httpAccessor.HttpContext!.Request.Cookies.TryGetValue("refreshToken", out var refreshToken);
-            Console.WriteLine("RT: " + refreshToken);
-            return Ok(_authService.Refresh(token, refreshToken!));
+            return Ok(_authService.Refresh(token!, refreshToken!));
         }
 
         [HttpGet]
