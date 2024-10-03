@@ -68,7 +68,7 @@ namespace LunchStack.Api.Services
                 IsEssential = true,
                 Secure = true,
                 SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddMinutes(10),
+                Expires = DateTime.UtcNow.AddMonths(6),
             });
 
             var userDto = _mapper.Map<User, UserDTO>(user);
@@ -112,7 +112,7 @@ namespace LunchStack.Api.Services
                 IsEssential = true,
                 Secure = true,
                 SameSite = SameSiteMode.None,
-                Expires = DateTime.UtcNow.AddMinutes(10),
+                Expires = DateTime.UtcNow.AddMonths(6),
             });
 
             return new
