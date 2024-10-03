@@ -40,9 +40,13 @@ namespace LunchStack.Api.Services
             return entity;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var category = await this.GetSingleCategoryAsync(id);
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<IEnumerable<CategoryDTO>> GetAllAsync()
@@ -52,6 +56,12 @@ namespace LunchStack.Api.Services
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<CategoryDTO>>(categories);
+        }
+
+        private async Task<Category> GetSingleCategoryAsync(int id)
+        {
+            return await _context.Categories
+                .FirstOrDefaultAsync(c => c.Id == id);
         }
 
         public Task<CategoryDTO> GetAsync(int id)
