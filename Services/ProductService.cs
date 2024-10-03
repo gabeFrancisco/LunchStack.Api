@@ -42,9 +42,13 @@ namespace LunchStack.Api.Services
             return entity;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var product = await this.GetSingleProductAsync(id);
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<IEnumerable<ProductDTO>> GetAllAsync()

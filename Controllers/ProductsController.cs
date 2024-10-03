@@ -32,5 +32,17 @@ namespace LunchStack.Api.Controllers
             return Ok(await _productService.CreateAsync(dto));
         }
 
+        [HttpGet("id")]
+        public async Task<IActionResult> Post([FromQuery] int id)
+        {
+            return Ok(await _productService.GetAsync(id));
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromQuery] int id)
+        {
+            return Ok(await _productService.DeleteAsync(id));
+        }
+
     }
 }
