@@ -64,9 +64,10 @@ namespace LunchStack.Api.Services
                 .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public Task<CategoryDTO> GetAsync(int id)
+        public async Task<CategoryDTO> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            var category = await this.GetSingleCategoryAsync(id);
+            return _mapper.Map<Category, CategoryDTO>(category);
         }
 
         public Task<CategoryDTO> UpdateAsync(CategoryDTO entity, int id)
