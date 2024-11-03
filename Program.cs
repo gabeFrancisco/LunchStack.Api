@@ -3,6 +3,7 @@ using System.Text;
 using AutoMapper;
 using LunchStack.Api.Context;
 using LunchStack.Api.Filters;
+using LunchStack.Api.Hubs;
 using LunchStack.Api.Models.Interfaces;
 using LunchStack.Api.Models.Mappings;
 using LunchStack.Api.Services;
@@ -37,7 +38,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ITableService, TableService>();
 builder.Services.AddScoped<IOrderSheetService, OrderSheetService>();
-
+builder.Services.AddSignalR();
 builder.Services.AddAuthentication(x =>
 {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -128,4 +129,7 @@ app.UseCors(lunchStackPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseWebSockets();
+app.MapHub<AppHub>("/sockets/apphub");
+
 app.Run();
