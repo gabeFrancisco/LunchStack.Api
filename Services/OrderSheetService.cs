@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text.Json;
 using AutoMapper;
 using LunchStack.Api.Context;
 using LunchStack.Api.Models;
 using LunchStack.Api.Models.DTOs;
 using LunchStack.Api.Models.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.Json;
 
 namespace LunchStack.Api.Services
 {
@@ -34,8 +31,15 @@ namespace LunchStack.Api.Services
                 throw new NullReferenceException("DTO cannot be null!");
             }
 
+            foreach (var order in entity.ProductOrders)
+            {
+                order.Product = null;
+            }
+
+            Console.WriteLine(JsonSerializer.Serialize(entity));
+
             var orderSheet = _mapper.Map<OrderSheetDTO, OrderSheet>(entity);
-         
+
             orderSheet.Table = await _context.Tables.
                 FirstOrDefaultAsync(t => t.Id == entity.TableId);
 
